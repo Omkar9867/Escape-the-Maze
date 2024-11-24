@@ -41,7 +41,26 @@ function drawPlayer(){
 function renderGame(){
     ctx.clearRect(0,0,canvas.width, canvas.height)
     drawGrid();
-    drawPlayer;
+    drawPlayer();
 }
 
 renderGame();
+
+//Add Arrow Key Movement
+document.addEventListener("keydown", (e) => {
+    switch (e.key) {
+        case "ArrowUp":
+            if(player.y > 0) player.y -= 1
+            break;
+        case "ArrowDown":
+            if(player.y < grids -1) player.y += 1
+            break;
+        case "ArrowLeft":
+            if(player.x > 0) player.x -= 1
+            break;
+        case "ArrowRight":
+            if(player.x < grids - 1) player.x += 1
+            break;
+    }
+    renderGame()
+})
