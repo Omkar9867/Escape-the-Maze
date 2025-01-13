@@ -1,34 +1,42 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
-var grids = 5; // 5x5 grid
+var grids = 6; // 5x5 grid
 var cellSize = canvas.width / grids;
 console.log({ cellSize: cellSize });
+var goal = {
+    x: 2,
+    y: 4,
+};
 var maze = [
-    [0, 0, 1, 0, 0], //0 --> Path
-    [0, 1, 1, 0, 0], //1 --> Wall
-    [0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 0],
-    [0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0], //0 --> Path
+    [0, 1, 1, 0, 0, 1], //1 --> Wall
+    [0, 0, 0, 0, 1, 1],
+    [1, 0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1],
+    [0, 1, 0, 1, 1, 0],
 ];
 function drawGrid() {
-    ctx.strokeStyle = '#ccc';
+    ctx.strokeStyle = "#ccc";
     for (var row = 0; row < grids; row++) {
         for (var col = 0; col < grids; col++) {
             //Draw cell border
             ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
             //Draw Walls
             if (maze[row][col] === 1) {
-                ctx.fillStyle = 'black';
+                ctx.fillStyle = "black";
                 ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
             }
         }
     }
+    //Draw a goal
+    ctx.fillStyle = "green";
+    ctx.fillRect(goal.x * cellSize, goal.y * cellSize, cellSize, cellSize);
 }
 drawGrid();
 var player = { x: 0, y: 0 };
 //Draw A Player
 function drawPlayer() {
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = "blue";
     var centerX = player.x * cellSize + cellSize / 2;
     var centerY = player.y * cellSize + cellSize / 2;
     var radius = cellSize / 3;
@@ -43,7 +51,7 @@ function renderGame() {
     drawPlayer();
 }
 renderGame();
-document.addEventListener('keydown', function (e) {
+document.addEventListener("keydown", function (e) {
     var x = player.x, y = player.y;
     switch (e.key) {
         case "ArrowUp":
@@ -64,4 +72,10 @@ document.addEventListener('keydown', function (e) {
             break;
     }
     renderGame();
+    // Check if player reached the goal
+    if (player.x === goal.x && player.y === goal.y) {
+        alert("You Win!");
+        player.x = 0;
+        player.y = 0;
+    }
 });
